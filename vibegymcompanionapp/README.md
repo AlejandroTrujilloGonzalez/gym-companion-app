@@ -1,54 +1,49 @@
-# Welcome to your Expo app 👋
+# Gym Companion
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Aplicación móvil para crear rutinas, registrar entrenamientos y seguir la progresión de cargas. Está construida con Expo, React Native y TypeScript, con soporte offline mediante SQLite.
 
-## Get started
+## Requisitos
 
-1. Install dependencies
+- Node.js 22.13 o superior
+- npm
 
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
+## Desarrollo
 
 ```bash
-npm run reset-project
+npm install
+npm start
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+Usa la salida de Expo para abrir la app en un dispositivo, emulador o navegador.
 
-### Other setup steps
+Las rutas están en `src/app/` y usan [Expo Router](https://docs.expo.dev/router/introduction).
 
-- To set up ESLint for linting, run `npx expo lint`, or follow our guide on ["Using ESLint and Prettier"](https://docs.expo.dev/guides/using-eslint/)
-- If you'd like to set up unit testing, follow our guide on ["Unit Testing with Jest"](https://docs.expo.dev/develop/unit-testing/)
-- Learn more about the TypeScript setup in this template in our guide on ["Using TypeScript"](https://docs.expo.dev/guides/typescript/)
+## Comprobaciones
 
-## Learn more
+```bash
+npm run lint
+npm run typecheck
+npm run format:check
+npx expo-doctor
+```
+
+## Stack
+
+- Expo SDK 57 y Expo Router
+- TypeScript y NativeWind 4
+- SQLite con Drizzle ORM
+- ESLint y Prettier
+
+La configuración de SQLite y las migraciones se implementan en la Fase 1.
+
+## Documentación
 
 To learn more about developing your project with Expo, look at the following resources:
 
 - [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
 - [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
 
-## Join the community
+## Recursos
 
 Join our community of developers creating universal apps.
 

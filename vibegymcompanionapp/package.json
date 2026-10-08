@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "dependencies": {
     "@expo/ui": "~57.0.22",
+    "drizzle-orm": "^0.45.4",
     "expo": "~57.0.27",
     "expo-constants": "~57.0.21",
     "expo-device": "~57.0.2",
@@ -13,10 +14,12 @@
     "expo-linking": "~57.0.12",
     "expo-router": "~57.0.25",
     "expo-splash-screen": "~57.0.9",
+    "expo-sqlite": "~57.0.4",
     "expo-status-bar": "~57.0.1",
     "expo-symbols": "~57.0.3",
     "expo-system-ui": "~57.0.4",
     "expo-web-browser": "~57.0.3",
+    "nativewind": "^4.2.7",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-native": "0.86.3",
@@ -29,6 +32,13 @@
   },
   "devDependencies": {
     "@types/react": "~19.2.2",
+    "babel-preset-expo": "^57.0.14",
+    "drizzle-kit": "^0.31.11",
+    "eslint": "^9.0.0",
+    "eslint-config-expo": "~57.0.2",
+    "prettier": "^3.9.9",
+    "prettier-plugin-tailwindcss": "^0.5.14",
+    "tailwindcss": "^3.4.19",
     "typescript": "~6.0.3"
   },
   "scripts": {
@@ -37,7 +47,10 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "lint": "expo lint"
+    "lint": "expo lint",
+    "typecheck": "tsc --noEmit",
+    "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx,css}\" \"*.{json,js}\" \"docs/**/*.md\" README.md",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx,js,jsx,css}\" \"*.{json,js}\" \"docs/**/*.md\" README.md"
   },
   "private": true
 }
