@@ -104,10 +104,10 @@ set_logs                       # Cada serie registrada
 
 ### Fase 2 — Gestión de rutinas (1.5 días)
 
-- [ ] Pantalla lista de rutinas
-- [ ] Crear/editar rutina con días
-- [ ] Añadir ejercicios a cada día (series/reps objetivo)
-- [ ] Reordenar y eliminar
+- [x] Pantalla lista de rutinas
+- [x] Crear/editar rutina con días
+- [x] Añadir ejercicios a cada día (series/reps objetivo)
+- [x] Reordenar y eliminar
 
 ### Fase 3 — Registrar entrenamiento y marcas (2 días)
 

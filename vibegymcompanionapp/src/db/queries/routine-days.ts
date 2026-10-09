@@ -46,3 +46,31 @@ export async function updateRoutineDay(
 export async function deleteRoutineDay(database: AppDatabase, id: number) {
   await database.delete(routineDays).where(eq(routineDays.id, id));
 }
+
+export async function moveRoutineDay(
+  database: AppDatabase,
+  routineId: number,
+  dayId: number,
+  direction: -1 | 1,
+) {
+  const days = await getRoutineDays(database, routineId);
+  const currentIndex = days.findIndex((day) => day.id === dayId);
+  const neighbor = days[currentIndex + direction];
+
+  if (currentIndex < 0 || !neighbor) return;
+
+  await database.transaction(async (transaction) => {
+    await transaction
+      .update(routineDays)
+      .set({ dayOrder: -1 })
+      .where(eq(routineDays.id, dayId));
+    await transaction
+      .update(routineDays)
+      .set({ dayOrder: days[currentIndex].dayOrder })
+      .where(eq(routineDays.id, neighbor.id));
+    await transaction
+      .update(routineDays)
+      .set({ dayOrder: neighbor.dayOrder })
+      .where(eq(routineDays.id, dayId));
+  });
+}

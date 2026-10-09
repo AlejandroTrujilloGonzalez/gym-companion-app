@@ -1,7 +1,22 @@
-import { desc, eq } from 'drizzle-orm';
+import { count, desc, eq } from 'drizzle-orm';
 
 import type { AppDatabase } from '../client';
-import { routines, type NewRoutine } from '../schema';
+import { routineDays, routines, type NewRoutine } from '../schema';
+
+export function getRoutineSummaries(database: AppDatabase) {
+  return database
+    .select({
+      id: routines.id,
+      name: routines.name,
+      description: routines.description,
+      createdAt: routines.createdAt,
+      dayCount: count(routineDays.id),
+    })
+    .from(routines)
+    .leftJoin(routineDays, eq(routines.id, routineDays.routineId))
+    .groupBy(routines.id)
+    .orderBy(desc(routines.createdAt));
+}
 
 export function getRoutines(database: AppDatabase) {
   return database.select().from(routines).orderBy(desc(routines.createdAt));
@@ -23,6 +38,31 @@ export async function createRoutine(
 ) {
   const [created] = await database.insert(routines).values(routine).returning();
   return created;
+}
+
+export async function createRoutineWithDays(
+  database: AppDatabase,
+  routine: Pick<NewRoutine, 'name'> & Partial<Pick<NewRoutine, 'description'>>,
+  dayNames: string[],
+) {
+  return database.transaction(async (transaction) => {
+    const [created] = await transaction
+      .insert(routines)
+      .values(routine)
+      .returning();
+
+    if (dayNames.length > 0) {
+      await transaction.insert(routineDays).values(
+        dayNames.map((name, dayOrder) => ({
+          routineId: created.id,
+          name,
+          dayOrder,
+        })),
+      );
+    }
+
+    return created;
+  });
 }
 
 export async function updateRoutine(
