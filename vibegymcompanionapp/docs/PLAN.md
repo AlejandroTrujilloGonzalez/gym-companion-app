@@ -96,11 +96,11 @@ set_logs                       # Cada serie registrada
 
 ### Fase 1 — Capa de datos (1 día)
 
-- [ ] Definir `schema.ts` con Drizzle
-- [ ] Configurar cliente SQLite + migraciones (`drizzle-kit generate`)
-- [ ] Hook `useMigrations` en el root layout
-- [ ] Funciones CRUD en `queries/` (rutinas, días, ejercicios)
-- [ ] Seed con ejercicios comunes (sentadilla, press banca, peso muerto…)
+- [x] Definir `schema.ts` con Drizzle
+- [x] Configurar cliente SQLite + migraciones (`drizzle-kit generate`)
+- [x] Hook `useMigrations` en el root layout
+- [x] Funciones CRUD en `queries/` (rutinas, días, ejercicios)
+- [x] Seed con ejercicios comunes (sentadilla, press banca, peso muerto…)
 
 ### Fase 2 — Gestión de rutinas (1.5 días)
 
