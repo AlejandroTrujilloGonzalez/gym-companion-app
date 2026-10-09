@@ -6,6 +6,10 @@ export default function RoutinesLayout() {
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="new" options={{ title: 'Nueva rutina' }} />
       <Stack.Screen name="[id]" options={{ title: 'Rutina' }} />
+      <Stack.Screen
+        name="workout/[sessionId]"
+        options={{ title: 'Entrenamiento' }}
+      />
     </Stack>
   );
 }

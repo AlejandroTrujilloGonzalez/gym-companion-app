@@ -111,11 +111,11 @@ set_logs                       # Cada serie registrada
 
 ### Fase 3 — Registrar entrenamiento y marcas (2 días)
 
-- [ ] Pantalla "Hoy": selecciona el día a entrenar
-- [ ] Sesión activa: registrar peso/reps/RPE por serie
-- [ ] Guardar `set_logs` en SQLite
-- [ ] Autocompletar con la marca de la última sesión
-- [ ] Finalizar sesión
+- [x] Pantalla "Hoy": selecciona el día a entrenar
+- [x] Sesión activa: registrar peso/reps/RPE por serie
+- [x] Guardar `set_logs` en SQLite
+- [x] Autocompletar con la marca de la última sesión
+- [x] Finalizar sesión
 
 ### Fase 4 — Progreso (1.5 días)
 
