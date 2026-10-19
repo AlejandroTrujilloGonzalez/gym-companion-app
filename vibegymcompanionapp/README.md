@@ -1,6 +1,15 @@
 # Gym Companion
 
-Aplicación móvil para crear rutinas, registrar entrenamientos y seguir la progresión de cargas. Está construida con Expo, React Native y TypeScript, con soporte offline mediante SQLite.
+Aplicación móvil offline-first para planificar rutinas, registrar sesiones de fuerza y revisar la progresión de cada ejercicio. Desarrollada con Expo, React Native y TypeScript.
+
+## Funcionalidades
+
+- Crear rutinas con días, ejercicios, series y repeticiones objetivo.
+- Registrar entrenamientos y completar series con peso, repeticiones y RPE.
+- Consultar récords personales, volumen y gráficas del historial por ejercicio.
+- Elegir tema del sistema, claro u oscuro; la preferencia se conserva en el dispositivo.
+- Exportar rutinas e historial como copia de seguridad JSON.
+- Usar los datos localmente con SQLite, sin depender de una conexión para entrenar.
 
 ## Requisitos
 
@@ -35,6 +44,20 @@ npx expo-doctor
 - ESLint y Prettier
 
 La configuración de SQLite y las migraciones se implementan en la Fase 1.
+
+## APK de vista previa
+
+El perfil `preview` genera un APK de distribución interna con EAS Build:
+
+```bash
+npx eas-cli@latest build -p android --profile preview
+```
+
+La compilación en la nube usa los recursos disponibles en la cuenta EAS vinculada.
+
+## Capturas
+
+Las capturas y el GIF de demostración se añadirán después de capturar la app en un dispositivo o emulador; no se incluyen imágenes de muestra como si fueran capturas reales.
 
 ## Documentación
 

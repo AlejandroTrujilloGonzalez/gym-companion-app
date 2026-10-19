@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { SymbolView } from 'expo-symbols';
 
+import { AnimatedEmptyState } from '@/components/animated-empty-state';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { useDatabase } from '@/db/provider';
@@ -125,7 +126,7 @@ export default function RoutinesScreen() {
               </ThemedText>
             </View>
           ) : error ? (
-            <View style={styles.emptyState}>
+            <AnimatedEmptyState style={styles.emptyState}>
               <ThemedText type="subtitle" style={styles.emptyTitle}>
                 No se pudo cargar
               </ThemedText>
@@ -133,9 +134,9 @@ export default function RoutinesScreen() {
               <Pressable onPress={() => void refreshRoutines()}>
                 <ThemedText style={styles.actionText}>Reintentar</ThemedText>
               </Pressable>
-            </View>
+            </AnimatedEmptyState>
           ) : (
-            <View style={styles.emptyState}>
+            <AnimatedEmptyState style={styles.emptyState}>
               <ThemedText style={styles.emptyMark}>01</ThemedText>
               <ThemedText type="subtitle" style={styles.emptyTitle}>
                 Empieza por tu plan
@@ -159,7 +160,7 @@ export default function RoutinesScreen() {
                   />
                 </Pressable>
               </Link>
-            </View>
+            </AnimatedEmptyState>
           )
         }
         renderItem={({ item, index }) => (

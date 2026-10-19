@@ -10,6 +10,7 @@ import {
 
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { AnimatedEmptyState } from '@/components/animated-empty-state';
 import { useDatabase } from '@/db/provider';
 import {
   getExerciseProgressSummaries,
@@ -137,7 +138,7 @@ export default function ProgressScreen() {
         data={items}
         keyExtractor={(item) => item.id}
         ListEmptyComponent={
-          <View style={styles.emptyState}>
+          <AnimatedEmptyState style={styles.emptyState}>
             <ThemedText style={styles.emptyMark}>01</ThemedText>
             <ThemedText style={styles.emptyTitle} type="subtitle">
               {error ? 'No se pudo cargar el progreso' : 'Aún no hay marcas'}
@@ -163,7 +164,7 @@ export default function ProgressScreen() {
                 <ThemedText style={styles.actionText}>Ir a entrenar</ThemedText>
               </Pressable>
             )}
-          </View>
+          </AnimatedEmptyState>
         }
         ListHeaderComponent={
           <View style={styles.heading}>

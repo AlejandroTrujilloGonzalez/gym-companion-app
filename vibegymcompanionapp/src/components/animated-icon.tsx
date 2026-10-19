@@ -36,7 +36,7 @@ export function AnimatedSplashOverlay() {
   const image = (
     <Image
       style={styles.image}
-      source={require('@/assets/images/expo-logo.png')}
+      source={require('@/assets/images/splash-icon.png')}
     />
   );
 
@@ -93,28 +93,9 @@ const logoKeyframe = new Keyframe({
   },
 });
 
-const glowKeyframe = new Keyframe({
-  0: {
-    transform: [{ rotateZ: '0deg' }],
-  },
-  100: {
-    transform: [{ rotateZ: '7200deg' }],
-  },
-});
-
 export function AnimatedIcon() {
   return (
     <View style={styles.iconContainer}>
-      <Animated.View
-        entering={glowKeyframe.duration(60 * 1000 * 4)}
-        style={styles.glow}
-      >
-        <Image
-          style={styles.glow}
-          source={require('@/assets/images/logo-glow.png')}
-        />
-      </Animated.View>
-
       <Animated.View
         entering={keyframe.duration(DURATION)}
         style={styles.background}
@@ -125,7 +106,7 @@ export function AnimatedIcon() {
       >
         <Image
           style={styles.image}
-          source={require('@/assets/images/expo-logo.png')}
+          source={require('@/assets/images/splash-icon.png')}
         />
       </Animated.View>
     </View>
@@ -137,11 +118,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  glow: {
-    width: 201,
-    height: 201,
-    position: 'absolute',
-  },
   iconContainer: {
     justifyContent: 'center',
     alignItems: 'center',
@@ -150,19 +126,19 @@ const styles = StyleSheet.create({
     zIndex: 100,
   },
   image: {
-    width: 76,
-    height: 71,
+    width: 160,
+    height: 160,
   },
   background: {
     borderRadius: 40,
-    experimental_backgroundImage: `linear-gradient(180deg, #3C9FFE, #0274DF)`,
+    backgroundColor: '#173B35',
     width: 128,
     height: 128,
     position: 'absolute',
   },
   splashOverlay: {
     ...StyleSheet.absoluteFill,
-    backgroundColor: '#208AEF',
+    backgroundColor: '#F2F4EB',
     alignItems: 'center',
     justifyContent: 'center',
     zIndex: 1000,

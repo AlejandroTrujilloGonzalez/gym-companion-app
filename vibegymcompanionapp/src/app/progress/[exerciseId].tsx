@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { LineChart } from 'react-native-gifted-charts';
 
+import { AnimatedEmptyState } from '@/components/animated-empty-state';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { useDatabase } from '@/db/provider';
@@ -153,21 +154,23 @@ export default function ExerciseProgressScreen() {
   if (!exercise) {
     return (
       <ThemedView style={styles.center}>
-        <ThemedText type="subtitle" style={styles.errorTitle}>
-          Historial no disponible
-        </ThemedText>
-        <ThemedText themeColor="textSecondary">
-          {error ?? 'No hay sesiones finalizadas para este ejercicio.'}
-        </ThemedText>
-        {error && (
-          <ThemedText
-            accessibilityRole="button"
-            onPress={() => void refreshHistory()}
-            style={styles.actionText}
-          >
-            Reintentar
+        <AnimatedEmptyState style={styles.center}>
+          <ThemedText type="subtitle" style={styles.errorTitle}>
+            Historial no disponible
           </ThemedText>
-        )}
+          <ThemedText themeColor="textSecondary">
+            {error ?? 'No hay sesiones finalizadas para este ejercicio.'}
+          </ThemedText>
+          {error && (
+            <ThemedText
+              accessibilityRole="button"
+              onPress={() => void refreshHistory()}
+              style={styles.actionText}
+            >
+              Reintentar
+            </ThemedText>
+          )}
+        </AnimatedEmptyState>
       </ThemedView>
     );
   }

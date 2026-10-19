@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { SymbolView } from 'expo-symbols';
 
+import { AnimatedEmptyState } from '@/components/animated-empty-state';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { useDatabase } from '@/db/provider';
@@ -176,7 +177,7 @@ export default function HomeScreen() {
               </ThemedText>
             </View>
           ) : error && days.length === 0 ? (
-            <View style={styles.emptyState}>
+            <AnimatedEmptyState style={styles.emptyState}>
               <ThemedText type="subtitle" style={styles.emptyTitle}>
                 No se pudieron cargar tus días
               </ThemedText>
@@ -188,9 +189,9 @@ export default function HomeScreen() {
               >
                 <ThemedText style={styles.actionText}>Reintentar</ThemedText>
               </Pressable>
-            </View>
+            </AnimatedEmptyState>
           ) : days.length === 0 ? (
-            <View style={styles.emptyState}>
+            <AnimatedEmptyState style={styles.emptyState}>
               <ThemedText style={styles.emptyMark}>01</ThemedText>
               <ThemedText type="subtitle" style={styles.emptyTitle}>
                 Aún no hay días de entrenamiento
@@ -214,7 +215,7 @@ export default function HomeScreen() {
                   />
                 </Pressable>
               </Link>
-            </View>
+            </AnimatedEmptyState>
           ) : (
             days.map((day, dayIndex) => {
               const activeSession = activeSessions.find(

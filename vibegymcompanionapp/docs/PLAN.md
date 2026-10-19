@@ -124,22 +124,14 @@ set_logs                       # Cada serie registrada
 - [x] Récords personales (PRs)
 - [x] Volumen total por sesión
 
-### Fase 5 — Sugerencias (1 día)
+### Fase 5 — Pulido y build (1 día)
 
-- [ ] `suggestions.ts` con reglas de **progressive overload**:
-  - Si completaste todas las series/reps objetivo → sugiere +2.5 kg
-  - Si fallaste reps 2 sesiones seguidas → sugiere deload (-10%)
-  - Alertar si un grupo muscular no se entrena hace >X días
-- [ ] Mostrar sugerencia al iniciar cada ejercicio
-- [ ] _(Opcional)_ Sugerencias con IA vía API
-
-### Fase 6 — Pulido y build (1 día)
-
-- [ ] Tema claro/oscuro con Nativewind
-- [ ] Estados vacíos y animaciones (`react-native-reanimated`)
-- [ ] Iconos y splash screen
+- [x] Tema claro/oscuro persistente (sistema, claro u oscuro)
+- [x] Poder compartir datos vía JSON
+- [x] Estados vacíos y animaciones (`react-native-reanimated`)
+- [x] Iconos y splash screen
 - [ ] **EAS Build** → generar APK: `eas build -p android --profile preview`
-- [ ] README con capturas/GIF, stack y features para el portfolio
+- [ ] README con capturas/GIF reales, stack y features para el portfolio (texto actualizado; faltan capturas)
 
 ---
 

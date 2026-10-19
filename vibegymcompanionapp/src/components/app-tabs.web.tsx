@@ -28,6 +28,9 @@ export default function AppTabs() {
           <TabTrigger name="progress" href="/progress" asChild>
             <TabButton>Progreso</TabButton>
           </TabTrigger>
+          <TabTrigger name="settings" href="/settings" asChild>
+            <TabButton>Ajustes</TabButton>
+          </TabTrigger>
         </CustomTabList>
       </TabList>
     </Tabs>
