@@ -119,10 +119,10 @@ set_logs                       # Cada serie registrada
 
 ### Fase 4 — Progreso (1.5 días)
 
-- [ ] Historial por ejercicio
-- [ ] Gráfica de evolución de peso (`react-native-gifted-charts`)
-- [ ] Récords personales (PRs)
-- [ ] Volumen total por sesión
+- [x] Historial por ejercicio
+- [x] Gráfica de evolución de peso (`react-native-gifted-charts`)
+- [x] Récords personales (PRs)
+- [x] Volumen total por sesión
 
 ### Fase 5 — Sugerencias (1 día)
 
