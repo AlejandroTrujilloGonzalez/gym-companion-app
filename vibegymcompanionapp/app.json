@@ -17,8 +17,7 @@
         "foregroundImage": "./assets/images/android-icon-foreground.png",
         "monochromeImage": "./assets/images/android-icon-monochrome.png"
       },
-      "predictiveBackGestureEnabled": false,
-      "package": "com.alejandrotrujillosteam.vibegymcompanionapp"
+      "predictiveBackGestureEnabled": false
     },
     "web": {
       "bundler": "metro",

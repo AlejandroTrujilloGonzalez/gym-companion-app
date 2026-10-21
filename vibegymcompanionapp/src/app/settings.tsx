@@ -1,4 +1,6 @@
+import { Link } from 'expo-router';
 import { Host, Picker } from '@expo/ui';
+import * as DocumentPicker from 'expo-document-picker';
 import { File, Paths } from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import { useState } from 'react';
@@ -19,7 +21,12 @@ import {
   type ThemePreference,
 } from '@/components/theme-preference-provider';
 import { useDatabase } from '@/db/provider';
-import { getBackupData } from '@/db/queries/export';
+import {
+  getBackupData,
+  parseBackupData,
+  restoreBackup,
+  type BackupData,
+} from '@/db/queries/export';
 import { useTheme } from '@/hooks/use-theme';
 
 export default function SettingsScreen() {
@@ -27,6 +34,11 @@ export default function SettingsScreen() {
   const theme = useTheme();
   const { preference, setPreference } = useThemePreference();
   const [exporting, setExporting] = useState(false);
+  const [importing, setImporting] = useState(false);
+  const [pendingBackup, setPendingBackup] = useState<{
+    data: BackupData;
+    fileName: string;
+  } | null>(null);
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -70,6 +82,74 @@ export default function SettingsScreen() {
     }
   }
 
+  async function chooseBackupFile() {
+    setImporting(true);
+    setPendingBackup(null);
+    setMessage(null);
+    setError(null);
+
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        type: 'application/json',
+        copyToCacheDirectory: true,
+        multiple: false,
+        base64: false,
+      });
+      if (result.canceled) return;
+
+      const asset = result.assets[0];
+      if (!asset.name.toLocaleLowerCase().endsWith('.json')) {
+        throw new Error('Selecciona un archivo con extensión .json.');
+      }
+
+      let contents: string;
+      if (Platform.OS === 'web') {
+        if (asset.file) {
+          contents = await asset.file.text();
+        } else {
+          const response = await fetch(asset.uri);
+          if (!response.ok) throw new Error('No se pudo leer el archivo.');
+          contents = await response.text();
+        }
+      } else {
+        contents = await new File(asset.uri).text();
+      }
+
+      const data = parseBackupData(contents);
+      setPendingBackup({ data, fileName: asset.name });
+      setMessage(
+        `${data.routines.length} rutinas, ${data.exercises.length} ejercicios y ${data.workoutSessions.length} entrenamientos encontrados.`,
+      );
+    } catch (cause) {
+      setError(
+        cause instanceof Error
+          ? cause.message
+          : 'No se pudo leer la copia seleccionada.',
+      );
+    } finally {
+      setImporting(false);
+    }
+  }
+
+  async function importBackup() {
+    if (!pendingBackup) return;
+
+    setImporting(true);
+    setMessage(null);
+    setError(null);
+    try {
+      await restoreBackup(database, pendingBackup.data);
+      setPendingBackup(null);
+      setMessage('Copia importada correctamente.');
+    } catch {
+      setError(
+        'No se pudo importar la copia. Los datos actuales se han conservado.',
+      );
+    } finally {
+      setImporting(false);
+    }
+  }
+
   return (
     <ThemedView style={styles.screen}>
       <ScrollView
@@ -102,6 +182,46 @@ export default function SettingsScreen() {
           </Host>
         </View>
 
+        {Platform.OS === 'web' && (
+          <View style={styles.section}>
+            <View style={styles.sectionHeading}>
+              <ThemedText style={styles.sectionTitle}>Biblioteca</ThemedText>
+              <ThemedText type="small" themeColor="textSecondary">
+                Ejercicios disponibles en este dispositivo
+              </ThemedText>
+            </View>
+            <Link href="/exercises" asChild>
+              <Pressable
+                accessibilityRole="button"
+                style={({ pressed }) => [
+                  styles.libraryLink,
+                  {
+                    backgroundColor: theme.backgroundElement,
+                    borderColor: theme.textSecondary,
+                    opacity: pressed ? 0.78 : 1,
+                  },
+                ]}
+              >
+                <View style={styles.libraryCopy}>
+                  <ThemedText type="smallBold">Gestionar ejercicios</ThemedText>
+                  <ThemedText type="small" themeColor="textSecondary">
+                    Consultar y añadir al catálogo
+                  </ThemedText>
+                </View>
+                <SymbolView
+                  name={{
+                    ios: 'dumbbell',
+                    android: 'fitness_center',
+                    web: 'fitness_center',
+                  }}
+                  size={20}
+                  tintColor={theme.textSecondary}
+                />
+              </Pressable>
+            </Link>
+          </View>
+        )}
+
         <View style={styles.section}>
           <View style={styles.sectionHeading}>
             <ThemedText style={styles.sectionTitle}>Tus datos</ThemedText>
@@ -111,18 +231,49 @@ export default function SettingsScreen() {
           </View>
           <Pressable
             accessibilityRole="button"
-            disabled={exporting}
+            accessibilityLabel="Importar copia JSON"
+            disabled={exporting || importing}
+            onPress={() => void chooseBackupFile()}
+            style={({ pressed }) => [
+              styles.importButton,
+              {
+                opacity: pressed || exporting || importing ? 0.76 : 1,
+              },
+            ]}
+          >
+            {importing ? (
+              <ActivityIndicator color="#FFFFFF" />
+            ) : (
+              <SymbolView
+                name={{
+                  ios: 'square.and.arrow.down',
+                  android: 'file_download',
+                  web: 'file_download',
+                }}
+                size={18}
+                tintColor="#FFFFFF"
+              />
+            )}
+            <ThemedText type="smallBold" style={styles.importLabel}>
+              Importar copia JSON
+            </ThemedText>
+          </Pressable>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Exportar copia JSON"
+            disabled={exporting || importing}
             onPress={() => void exportBackup()}
             style={({ pressed }) => [
               styles.exportButton,
               {
-                backgroundColor: theme.text,
-                opacity: pressed || exporting ? 0.72 : 1,
+                backgroundColor: theme.backgroundElement,
+                borderColor: theme.backgroundSelected,
+                opacity: pressed || exporting || importing ? 0.68 : 1,
               },
             ]}
           >
             {exporting ? (
-              <ActivityIndicator color={theme.background} />
+              <ActivityIndicator color={theme.text} />
             ) : (
               <SymbolView
                 name={{
@@ -131,13 +282,56 @@ export default function SettingsScreen() {
                   web: 'ios_share',
                 }}
                 size={18}
-                tintColor={theme.background}
+                tintColor={theme.text}
               />
             )}
-            <ThemedText type="smallBold" style={{ color: theme.background }}>
-              Exportar copia JSON
-            </ThemedText>
+            <ThemedText type="smallBold">Exportar copia JSON</ThemedText>
           </Pressable>
+          {pendingBackup && (
+            <View
+              style={[
+                styles.importConfirmation,
+                { backgroundColor: theme.backgroundElement },
+              ]}
+            >
+              <ThemedText type="smallBold" selectable>
+                Restaurar {pendingBackup.fileName}
+              </ThemedText>
+              <ThemedText type="small" themeColor="textSecondary">
+                Esta acción reemplazará las rutinas, ejercicios y entrenamientos
+                de este dispositivo. No se puede deshacer.
+              </ThemedText>
+              <View style={styles.confirmationActions}>
+                <Pressable
+                  accessibilityRole="button"
+                  disabled={importing}
+                  onPress={() => setPendingBackup(null)}
+                  style={styles.cancelButton}
+                >
+                  <ThemedText type="smallBold">Cancelar</ThemedText>
+                </Pressable>
+                <Pressable
+                  accessibilityRole="button"
+                  disabled={importing}
+                  onPress={() => void importBackup()}
+                  style={({ pressed }) => [
+                    styles.confirmButton,
+                    {
+                      backgroundColor: theme.text,
+                      opacity: pressed || importing ? 0.65 : 1,
+                    },
+                  ]}
+                >
+                  <ThemedText
+                    type="smallBold"
+                    style={{ color: theme.background }}
+                  >
+                    Importar copia
+                  </ThemedText>
+                </Pressable>
+              </View>
+            </View>
+          )}
           {message && (
             <ThemedText
               accessibilityLiveRegion="polite"
@@ -171,14 +365,56 @@ const styles = StyleSheet.create({
   section: { gap: 13 },
   sectionHeading: { gap: 4 },
   sectionTitle: { fontSize: 19, fontWeight: '800' },
+  libraryLink: {
+    minHeight: 62,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 14,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderRadius: 7,
+  },
+  libraryCopy: { gap: 2 },
   pickerHost: { width: '100%' },
   exportButton: {
-    minHeight: 50,
+    minHeight: 54,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     gap: 9,
+    paddingHorizontal: 14,
+    borderWidth: StyleSheet.hairlineWidth,
     borderRadius: 7,
+  },
+  importButton: {
+    minHeight: 54,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 9,
+    paddingHorizontal: 14,
+    borderRadius: 7,
+    backgroundColor: '#208AEF',
+  },
+  importLabel: { color: '#FFFFFF' },
+  importConfirmation: { padding: 14, borderRadius: 7, gap: 12 },
+  confirmationActions: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    gap: 8,
+  },
+  cancelButton: {
+    minHeight: 42,
+    justifyContent: 'center',
+    paddingHorizontal: 12,
+  },
+  confirmButton: {
+    minHeight: 42,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: 14,
+    borderRadius: 6,
   },
   errorText: { color: '#c0392b' },
 });

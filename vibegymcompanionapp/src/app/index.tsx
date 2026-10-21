@@ -245,6 +245,7 @@ export default function HomeScreen() {
                   </View>
                   <Pressable
                     accessibilityRole="button"
+                    accessibilityLabel={`${activeSession ? 'Seguir' : 'Empezar'} ${day.name}`}
                     disabled={startingDayId !== null}
                     onPress={() =>
                       activeSession
@@ -339,8 +340,8 @@ const styles = StyleSheet.create({
   dayNumber: { width: 28, fontSize: 12, fontVariant: ['tabular-nums'] },
   dayCopy: { flex: 1, gap: 4 },
   startButton: {
-    minWidth: 82,
-    height: 38,
+    minWidth: 90,
+    height: 44,
     paddingHorizontal: 12,
     borderRadius: 6,
     alignItems: 'center',

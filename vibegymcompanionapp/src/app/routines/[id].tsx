@@ -1,4 +1,4 @@
-import { router, useLocalSearchParams } from 'expo-router';
+import { router, useFocusEffect, useLocalSearchParams } from 'expo-router';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
@@ -150,6 +150,25 @@ export default function RoutineDetailScreen() {
       active = false;
     };
   }, [applyRoutineData, fetchRoutine]);
+
+  useFocusEffect(
+    useCallback(() => {
+      let active = true;
+      getExercises(database)
+        .then((data) => {
+          if (active) setCatalog(data);
+        })
+        .catch(() => {
+          if (active) {
+            setError('No se pudo actualizar el catálogo de ejercicios.');
+          }
+        });
+
+      return () => {
+        active = false;
+      };
+    }, [database]),
+  );
 
   const filteredExercises = useMemo(() => {
     const search = exerciseSearch.trim().toLocaleLowerCase();
